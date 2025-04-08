@@ -293,3 +293,60 @@ input[type="text"] {
 .input-container.full-width {
     flex: 1;
 }
+
+@media (max-width: 768px) {
+    .cad-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-container {
+        width: 100%;
+    }
+
+    .dashboard-container {
+        padding: 10px;
+        margin: 10px auto;
+    }
+
+    .form-container button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        font-size: 12px;
+        min-width: 600px;
+    }
+
+    .table th, .table td {
+        padding: 6px;
+    }
+
+    #searchInput {
+        width: 100%;
+    }
+}
+
+input:focus {
+    outline: none;
+    border-color: #336699;
+    box-shadow: 0 0 5px rgba(51, 102, 153, 0.5);
+}
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+}

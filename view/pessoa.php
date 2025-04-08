@@ -73,8 +73,11 @@
             <input type="hidden" id="cdpessoa">
 
             <div class="button-group">
-                <button id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
-                <button id="backButton">Voltar ao Menu Principal</button>
+                <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
+                <button type="button" id="backButton">Voltar ao Menu Principal</button>
+
+                <!-- <button id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
+                <button id="backButton">Voltar ao Menu Principal</button> -->
             </div>
         </div>
 
