@@ -75,9 +75,13 @@
             <div class="button-group">
                 <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
                 <button type="button" id="backButton">Voltar ao Menu Principal</button>
-
-                <!-- <button id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
-                <button id="backButton">Voltar ao Menu Principal</button> -->
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="gerarPDF('procuracao')">Procuração</button>
+                <button type="button" onclick="gerarPDF('contrato')">Contrato</button>
+                <button type="button" onclick="gerarPDF('declaracao')">Declaração</button>
+                <button type="button" onclick="gerarPDF('revogacao')">Revogação</button>
+                <button type="button" onclick="gerarPDF('todos')">Todos</button>
             </div>
         </div>
 

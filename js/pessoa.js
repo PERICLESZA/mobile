@@ -156,3 +156,37 @@ function deletePessoa(id) {
         alert("Erro ao excluir pessoa.");
     });
 }
+
+function gerarPDF(documento) {
+    const dados = {
+        nome: document.getElementById("nome").value,
+        nacionalidade: document.getElementById("nacionalidade").value,
+        profissao: document.getElementById("profissao").value,
+        estado_civil: document.getElementById("estado_civil").value,
+        rg: document.getElementById("rg").value,
+        cpf: document.getElementById("cpf").value,
+        endereco: document.getElementById("endereco").value,
+        bairro: document.getElementById("bairro").value,
+        municipio: document.getElementById("municipio").value,
+        uf: document.getElementById("uf").value,
+        cep: document.getElementById("cep").value,
+        telefone: document.getElementById("telefone").value,
+        documento: documento // <- Envia a opção selecionada
+    };
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "../controller/gerapdfcontroller.php";
+    form.target = "_blank";
+
+    for (const key in dados) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = dados[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
