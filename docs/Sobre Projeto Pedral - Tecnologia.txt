@@ -1,0 +1,28 @@
+Sobre Projeto Pedral - Tecnologia
+
+Aplicativo web que permite levar a tecnologia ao campo
+
+- Uma pessoa coletará os dados que vão diretamente para o banco de dados do escritório;
+- Uma vez digitados os dados será possível imprimir todos os documentos;
+
+- O aplicativo não será instalado:
+	- A internet será requisito obrigatório;
+	- Poderá ser usado no celular, notebook, desktop;
+	- Considerando que poderíamos usar a starlink;
+	- Precisa verificar se eles já tem starlink lá;
+
+- Equipamentos necessários:
+	- Celular, pode ser da própria pessoa que coletará os dados;
+	- Impressora wifi, laser compacta (na faixa de R$1000);
+	- Material: papel, cartucho de impressora para reposição;
+
+	
+
+
+
+
+
+2. Plano Viagem (Starlink Roam)
+Mensalidade: a partir de R$ 576 (impostos inclusos)​
+Equipamento: R$ 2.400 ou 12x de R$ 200 sem juros​
+Características: uso em movimento, ideal para motorhomes, campistas e pessoas que trabalham de qualquer lugar

@@ -141,20 +141,37 @@ function searchPessoas($conn)
 {
     $term = $_GET['term'] ?? '';
 
-    $sql = "SELECT 
-                cdpessoa, 
-                nome, 
-                profissao,
-                telefone, 
-                municipio, 
-                uf
-            FROM 
-                pessoa
-            WHERE nome LIKE :term
-            ORDER BY nome ASC";
+    if ($term === '****') {
+        // Buscar todos os registros
+        $sql = "SELECT 
+                    cdpessoa, 
+                    nome, 
+                    profissao,
+                    telefone, 
+                    municipio, 
+                    uf
+                FROM 
+                    pessoa
+                ORDER BY nome ASC";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([':term' => "%$term%"]);
+        $stmt = $conn->query($sql); // sem bind, pois não tem parâmetros
+    } else {
+        // Buscar com filtro por nome
+        $sql = "SELECT 
+                    cdpessoa, 
+                    nome, 
+                    profissao,
+                    telefone, 
+                    municipio, 
+                    uf
+                FROM 
+                    pessoa
+                WHERE nome LIKE :term
+                ORDER BY nome ASC";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':term' => "%$term%"]);
+    }
 
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 }

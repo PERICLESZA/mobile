@@ -42,4 +42,22 @@ $nmstore = isset($_SESSION['nmstore']) ? $_SESSION['nmstore'] : 'Nenhuma loja se
     </div>
 </body>
 
+<script>
+    // Função para tratar o tempo da sessão
+    let timeout;
+
+    function resetTimeout() {
+        // Limpa o timeout anterior
+        clearTimeout(timeout);
+        // Define um novo timeout de 30 segundos
+        timeout = setTimeout(function() {
+            // window.location.href = "../index.php"; // Redireciona para o login.php após 30 segundos de inatividade
+            window.location.href = "../controller/logout.php"; // Redireciona para logout após 10 minutos
+        }, 600000);
+    }
+
+    // Chamada inicial ao carregar a página
+    resetTimeout(); // Inicia o timer assim que a página é carregada
+</script>
+
 </html>

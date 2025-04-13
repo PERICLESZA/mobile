@@ -5,6 +5,24 @@ document.addEventListener("DOMContentLoaded", () => {
     autocompletePessoa();
 });
 
+
+document.addEventListener("DOMContentLoaded", function () {
+    const cpfInput = document.getElementById("cpf");
+
+    cpfInput.addEventListener("blur", function () {
+        const cpf = cpfInput.value.trim();
+
+        if (cpf && !validarCPF(cpf)) {
+            cpfInput.classList.add("input-error");
+            alert("CPF inválido. Corrija antes de sair do campo.");
+            cpfInput.focus(); // impede sair do campo
+        } else {
+            cpfInput.classList.remove("input-error");
+        }
+    });
+});
+
+
 let editingPessoaId = null;
 
 document.getElementById('searchInput').addEventListener('input', autocompletePessoa);
@@ -27,23 +45,24 @@ function autocompletePessoa() {
             data.forEach(pessoa => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                   <td>${pessoa.cdpessoa}</td>
+                   <td class="action-icons">
+                       <a href="#" onclick="editPessoa(${pessoa.cdpessoa})"><i class="fas fa-edit edit-icon" title="Editar"></i></a>
+                   </td>                   <td>${pessoa.cdpessoa}</td>
                    <td>${pessoa.nome}</td>
                    <td>${pessoa.profissao}</td>
                    <td>${pessoa.telefone}</td>
                    <td>${pessoa.municipio}</td>
                    <td>${pessoa.uf}</td>
-                   <td class="action-icons">
-                       <a href="#" onclick="editPessoa(${pessoa.cdpessoa})"><i class="fas fa-edit edit-icon" title="Editar"></i></a>
-                       <a href="#" onclick="deletePessoa(${pessoa.cdpessoa})"><i class="fas fa-trash-alt delete-icon" title="Excluir"></i></a>
-                   </td>
              `;
+                // <a href="#" onclick="deletePessoa(${pessoa.cdpessoa})"><i class="fas fa-trash-alt delete-icon" title="Excluir"></i></a>
+
                 tbody.appendChild(tr);
             });
         });
 }
 
 function savePessoa() {
+const cpf = document.getElementById("cpf").value.trim();
     const fields = [
         "nome", "nacionalidade", "profissao", "estado_civil", "rg", "cpf",
         "endereco", "bairro", "municipio", "uf", "cep", "telefone"
@@ -54,6 +73,17 @@ function savePessoa() {
     if (nome === '') {
         alert("O nome não pode estar vazio.");
         return;
+    }
+
+    const cpfInput = document.getElementById("cpf");
+
+    if (!validarCPF(cpf)) {
+        cpfInput.classList.add("input-error");
+        cpfInput.focus();
+        alert("CPF inválido. Por favor, digite um CPF válido.");
+        return;
+    } else {
+        cpfInput.classList.remove("input-error");
     }
 
     const action = editingPessoaId ? 'update' : 'create';
@@ -120,6 +150,12 @@ function editPessoa(id) {
 
             document.getElementById("saveBtn").textContent = "Salvar Alteração";
             editingPessoaId = id;
+
+            // Abrir a imagem com base no CPF, se o CPF estiver disponível
+            // const cpf = data.cpf || '';
+            // if (cpf) {
+            //     window.open(`../view/img.php?cpf=${cpf}`, '_blank');
+            // }
         } else {
             alert("Pessoa não encontrada.");
         }
@@ -190,3 +226,76 @@ function gerarPDF(documento) {
     document.body.appendChild(form);
     form.submit();
 }
+
+// No botão:
+document.getElementById('abrirImgBtn').addEventListener('click', () => {
+  const cpf = document.getElementById('cpf').value;
+
+  fetch('../controller/set_session.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: 'cpf=' + encodeURIComponent(cpf)
+  })
+  .then(response => response.text())
+  .then(data => {
+    console.log('Resposta do set_session:', data);
+    if (data.trim() === 'OK') {
+      // só redireciona se o CPF foi salvo com sucesso
+      window.location.href = 'img.php';
+    } else {
+      alert('Erro ao definir CPF na sessão');
+    }
+  })
+  .catch(err => {
+    console.error('Erro no fetch do CPF:', err);
+  });
+});
+
+// funcção para validar o cpf
+function validarCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, '');
+
+    if (cpf === '') return false;
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+        soma += parseInt(cpf.charAt(i)) * (10 - i);
+    }
+    let resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(9))) return false;
+
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+        soma += parseInt(cpf.charAt(i)) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(10))) return false;
+
+    return true;
+}
+
+// Função para tratar o tempo da sessão
+let timeout;
+
+function resetTimeout() {
+    // Limpa o timeout anterior
+    clearTimeout(timeout);
+    // Define um novo timeout de 30 segundos
+    timeout = setTimeout(function() {
+        // window.location.href = "../index.php"; // Redireciona para o login.php após 30 segundos de inatividade
+        window.location.href = "../controller/logout.php"; // Redireciona para logout após 10 minutos
+    }, 600000);
+}
+
+// Adicionando event listeners para reiniciar o timer quando o usuário interagir
+document.getElementById("nome").addEventListener("change", resetTimeout);
+document.getElementById("cpf").addEventListener("change", resetTimeout);
+document.querySelector("button").addEventListener("click", resetTimeout);
+
+// Chamada inicial ao carregar a página
+resetTimeout(); // Inicia o timer assim que a página é carregada

@@ -77,42 +77,133 @@
                 <button type="button" id="backButton">Voltar ao Menu Principal</button>
             </div>
             <div class="button-group">
-                <button type="button" onclick="gerarPDF('procuracao')">Procuração</button>
+                <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button>
+                <button type="button" id="abrirImgBtn">Capturar Imagem</button>
+
+                <!-- <button type="button" onclick="gerarPDF('procuracao')">Procuração</button>
                 <button type="button" onclick="gerarPDF('contrato')">Contrato</button>
                 <button type="button" onclick="gerarPDF('declaracao')">Declaração</button>
-                <button type="button" onclick="gerarPDF('revogacao')">Revogação</button>
-                <button type="button" onclick="gerarPDF('todos')">Todos</button>
+                <button type="button" onclick="gerarPDF('revogacao')">Revogação</button> -->
+
+                <!-- <video id="camera" autoplay playsinline width="400" style="border: 1px solid #ccc;"></video>
+                <canvas id="snapshot" style="display: none;"></canvas>
+
+                <button onclick="tirarFoto()">Foto</button> -->
+
+
+            </div>
+            <div>
+                <h2>Buscar Pessoa</h2>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Digite o nome da pessoa..."
+                    style="width: 300px; padding: 8px; margin-bottom: 20px;">
+            </div>
+
+            <div class="table-container">
+                <table border="0" class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Profissão</th>
+                            <th>Telefone</th>
+                            <th>Município</th>
+                            <th>UF</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pessoa_data"></tbody>
+                </table>
             </div>
         </div>
 
-        <div>
-            <h2>Buscar Pessoa</h2>
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Digite o nome da pessoa..."
-                style="width: 300px; padding: 8px; margin-bottom: 20px;">
-        </div>
+        <script src="../js/pessoa.js"></script>
 
-        <div class="table-container">
-            <table border="0" class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Profissão</th>
-                        <th>Telefone</th>
-                        <th>Município</th>
-                        <th>UF</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="pessoa_data"></tbody>
-            </table>
-        </div>
-    </div>
+        <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 
-    <script src="../js/pessoa.js"></script>
+        <script>
+            const video = document.getElementById('camera');
+            const canvas = document.getElementById('snapshot');
+            let stream;
+
+            // Inicia a câmera traseira
+            // navigator.mediaDevices.getUserMedia({
+            //         video: {
+            //             facingMode: 'environment'
+            //         } // Acessa a câmera traseira
+            //     })
+            //     .then(s => {
+            //         stream = s;
+            //         video.srcObject = stream;
+            //     })
+            //     .catch(e => alert('Erro ao acessar a câmera: ' + e));
+
+            // function tirarFoto() {
+            //     canvas.width = video.videoWidth;
+            //     canvas.height = video.videoHeight;
+            //     canvas.getContext('2d').drawImage(video, 0, 0);
+            //     gerarPDFPesquisavel(); // Chama a geração de PDF logo após tirar a foto
+            // }
+
+            async function gerarPDFPesquisavel() {
+                const imageBlob = await new Promise(resolve =>
+                    canvas.toBlob(resolve, 'image/jpeg', 1)
+                );
+
+                // OCR com Tesseract.js
+                const {
+                    data: {
+                        text
+                    }
+                } = await Tesseract.recognize(imageBlob, 'por', {
+                    logger: m => console.log(m) // pode remover se quiser
+                });
+
+                // Geração de PDF com texto
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const page = pdfDoc.addPage([595.28, 841.89]); // A4
+                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+                const lines = text.split('\n');
+                let y = 800;
+                for (let line of lines) {
+                    const clean = line.trim();
+                    if (!clean) continue;
+                    if (y < 30) {
+                        page = pdfDoc.addPage([595.28, 841.89]);
+                        y = 800;
+                    }
+                    page.drawText(clean, {
+                        x: 50,
+                        y: y,
+                        size: 12,
+                        font,
+                        color: PDFLib.rgb(0, 0, 0),
+                    });
+                    y -= 16;
+                }
+
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], {
+                    type: "application/pdf"
+                });
+
+                const formData = new FormData();
+                formData.append("pdf", blob, "documento_camera.pdf");
+
+                const res = await fetch("../controller/uploadcontroller.php", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const resultado = await res.text();
+                console.log(resultado);
+            }
+        </script>
+
 </body>
 
 </html>

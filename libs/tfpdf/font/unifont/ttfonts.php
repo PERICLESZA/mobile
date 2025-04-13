@@ -32,7 +32,6 @@ define("GF_XYSCALE",(1 << 6));
 define("GF_TWOBYTWO",(1 << 7));
 
 
-
 class TTFontFile {
 
 public $maxUni;
