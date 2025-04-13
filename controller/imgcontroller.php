@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $diretorio = __DIR__ . '/../uploads/docs';
+    $diretorio = __DIR__ . '/../uploads';
     if (!is_dir($diretorio)) {
         mkdir($diretorio, 0777, true);
     }
