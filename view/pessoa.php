@@ -69,8 +69,14 @@
                     <input type="text" id="telefone" placeholder="Digite o telefone">
                 </div>
             </div>
-
+            <div class="cad-group">
+                <div class="input-container">
+                    <label for="docespecial">Documento</label>
+                    <input type="text" id="docespecial" placeholder="Digite um documento extra">
+                </div>
+            </div>
             <input type="hidden" id="cdpessoa">
+            <input type="hidden" id="excluido">
 
             <div class="button-group">
                 <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
@@ -105,13 +111,14 @@
                 <table border="0" class="table">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Edit</th>
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Profissão</th>
                             <th>Telefone</th>
                             <th>Município</th>
                             <th>UF</th>
+                            <th>Del</th>
                         </tr>
                     </thead>
                     <tbody id="pessoa_data"></tbody>

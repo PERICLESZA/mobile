@@ -47,14 +47,17 @@ function autocompletePessoa() {
                 tr.innerHTML = `
                    <td class="action-icons">
                        <a href="#" onclick="editPessoa(${pessoa.cdpessoa})"><i class="fas fa-edit edit-icon" title="Editar"></i></a>
-                   </td>                   <td>${pessoa.cdpessoa}</td>
+                   </td>
+                   <td>${pessoa.cdpessoa}</td>
                    <td>${pessoa.nome}</td>
                    <td>${pessoa.profissao}</td>
                    <td>${pessoa.telefone}</td>
                    <td>${pessoa.municipio}</td>
                    <td>${pessoa.uf}</td>
+                   <td class="action-icons">
+                      <a href="#" onclick="deletePessoa(${pessoa.cdpessoa})"><i class="fas fa-trash-alt delete-icon" title="Excluir"></i></a>
+                   </td>
              `;
-                // <a href="#" onclick="deletePessoa(${pessoa.cdpessoa})"><i class="fas fa-trash-alt delete-icon" title="Excluir"></i></a>
 
                 tbody.appendChild(tr);
             });
@@ -65,7 +68,8 @@ function savePessoa() {
 const cpf = document.getElementById("cpf").value.trim();
     const fields = [
         "nome", "nacionalidade", "profissao", "estado_civil", "rg", "cpf",
-        "endereco", "bairro", "municipio", "uf", "cep", "telefone"
+        "endereco", "bairro", "municipio", "uf", "cep", "telefone",
+        "docespecial", "excluido"
     ];
 
      // Verificação simples: nome não pode estar vazio
@@ -147,6 +151,9 @@ function editPessoa(id) {
             document.getElementById("uf").value = data.uf || '';
             document.getElementById("cep").value = data.cep || '';
             document.getElementById("telefone").value = data.telefone || '';
+            document.getElementById("docespecial").value = data.docespecial || '';
+            // document.getElementById("excluido").value = data.excluido || '';
+
 
             document.getElementById("saveBtn").textContent = "Salvar Alteração";
             editingPessoaId = id;
@@ -242,8 +249,10 @@ document.getElementById('abrirImgBtn').addEventListener('click', () => {
   .then(data => {
     console.log('Resposta do set_session:', data);
     if (data.trim() === 'OK') {
-      // só redireciona se o CPF foi salvo com sucesso
-      window.location.href = 'img.php';
+        
+    // 🔁 Abre img.php em nova aba
+      window.open('img.php', '_blank');
+
     } else {
       alert('Erro ao definir CPF na sessão');
     }

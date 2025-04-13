@@ -37,9 +37,9 @@ function listPessoas($conn)
 function createPessoa($conn)
 {
     $stmt = $conn->prepare("INSERT INTO pessoa 
-        (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone)
+        (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone, docespecial, excluido)
         VALUES 
-        (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone)");
+        (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone, :docespecial, :excluido)");
 
     $stmt->execute([
         ':nome' => $_POST['nome'] ?? '',
@@ -53,7 +53,11 @@ function createPessoa($conn)
         ':municipio' => $_POST['municipio'] ?? '',
         ':uf' => $_POST['uf'] ?? '',
         ':cep' => $_POST['cep'] ?? '',
-        ':telefone' => $_POST['telefone'] ?? ''
+        ':telefone' => $_POST['telefone'] ?? '',
+        ':docespecial' => $_POST['docespecial'] ?? '',
+        ':excluido' => $_POST['excluido'] ?? '',
+
+        
     ]);
 
     echo json_encode(["success" => "Pessoa cadastrada com sucesso"]);
@@ -80,7 +84,9 @@ function updatePessoa($conn)
         municipio = :municipio,
         uf = :uf,
         cep = :cep,
-        telefone = :telefone
+        telefone = :telefone,
+        docespecial = :docespecial,
+        excluido = :excluido
         WHERE cdpessoa = :cdpessoa");
 
     $stmt->execute([
@@ -96,7 +102,9 @@ function updatePessoa($conn)
         ':municipio' => $_POST['municipio'] ?? '',
         ':uf' => $_POST['uf'] ?? '',
         ':cep' => $_POST['cep'] ?? '',
-        ':telefone' => $_POST['telefone'] ?? ''
+        ':telefone' => $_POST['telefone'] ?? '',
+        ':docespecial' => $_POST['docespecial'] ?? '',
+        ':excluido' => $_POST['excluido'] ?? ''
     ]);
 
     echo json_encode(["success" => "Pessoa atualizada com sucesso"]);
@@ -111,7 +119,7 @@ function deletePessoa($conn)
         return;
     }
 
-    $stmt = $conn->prepare("DELETE FROM pessoa WHERE cdpessoa = :cdpessoa");
+    $stmt = $conn->prepare("UPDATE pessoa SET excluido = 1 WHERE cdpessoa = :cdpessoa");
     $stmt->bindParam(":cdpessoa", $cdpessoa);
 
     if ($stmt->execute()) {
@@ -142,7 +150,7 @@ function searchPessoas($conn)
     $term = $_GET['term'] ?? '';
 
     if ($term === '****') {
-        // Buscar todos os registros
+        // Buscar todos os registros, excluindo os marcados como excluido = 1
         $sql = "SELECT 
                     cdpessoa, 
                     nome, 
@@ -152,11 +160,12 @@ function searchPessoas($conn)
                     uf
                 FROM 
                     pessoa
+                WHERE excluido != 1
                 ORDER BY nome ASC";
 
         $stmt = $conn->query($sql); // sem bind, pois não tem parâmetros
     } else {
-        // Buscar com filtro por nome
+        // Buscar com filtro por nome, excluindo os marcados como excluido = 1
         $sql = "SELECT 
                     cdpessoa, 
                     nome, 
@@ -166,7 +175,7 @@ function searchPessoas($conn)
                     uf
                 FROM 
                     pessoa
-                WHERE nome LIKE :term
+                WHERE nome LIKE :term AND excluido != 1
                 ORDER BY nome ASC";
 
         $stmt = $conn->prepare($sql);

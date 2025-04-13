@@ -16,7 +16,7 @@
 
 <body>
     <div class="dashboard-container">
-        <h1>Capturar Imagem do Documento</h1>
+        <h1>Capturas</h1>
 
         <div class="form-container">
             <div class="cad-group">
@@ -34,7 +34,7 @@
                 <button type="button" onclick="tirarFotoPara('contrato')">Foto Contrato</button>
                 <button type="button" onclick="tirarFotoPara('declaracao')">Foto Declaração</button>
                 <button type="button" onclick="tirarFotoPara('revogacao')">Foto Revogação</button>
-                <button type="button" onclick="window.location.href='pessoa.php'">Voltar</button>
+                <button type="button" onclick="window.close()">Voltar</button>
             </div>
         </div>
     </div>
