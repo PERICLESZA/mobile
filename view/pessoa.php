@@ -22,6 +22,10 @@
                     <input type="text" id="nome" placeholder="Digite o nome completo">
                 </div>
                 <div class="input-container">
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" placeholder="Digite o CPF">
+                </div>
+                <div class="input-container">
                     <label for="nacionalidade">Nacionalidade</label>
                     <input type="text" id="nacionalidade" placeholder="Digite a nacionalidade">
                 </div>
@@ -36,10 +40,6 @@
                 <div class="input-container">
                     <label for="rg">RG</label>
                     <input type="text" id="rg" placeholder="Digite o RG">
-                </div>
-                <div class="input-container">
-                    <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" placeholder="Digite o CPF">
                 </div>
             </div>
 
@@ -114,7 +114,7 @@
                             <th>Edit</th>
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>Profissão</th>
+                            <th>CPF</th>
                             <th>Telefone</th>
                             <th>Município</th>
                             <th>UF</th>

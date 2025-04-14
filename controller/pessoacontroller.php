@@ -113,14 +113,21 @@ function updatePessoa($conn)
 function deletePessoa($conn)
 {
     $cdpessoa = $_POST['cdpessoa'] ?? null;
+    $cpf = $_POST['cpf'] ?? null;
 
     if (!$cdpessoa) {
         echo json_encode(["error" => "ID inválido"]);
         return;
     }
+    $cpfModificado = $cpf . '-' . $cdpessoa;
 
-    $stmt = $conn->prepare("UPDATE pessoa SET excluido = 1 WHERE cdpessoa = :cdpessoa");
+    // Exibindo os valores para verificação
+    // error_log("Atualizando CPF: " . $cpfModificado);
+    // error_log("CDPESSOA: " . $cdpessoa);
+
+    $stmt = $conn->prepare("UPDATE pessoa SET cpf = :cpf, excluido = 1 WHERE cdpessoa = :cdpessoa");
     $stmt->bindParam(":cdpessoa", $cdpessoa);
+    $stmt->bindParam(":cpf", $cpfModificado);
 
     if ($stmt->execute()) {
         echo json_encode(["success" => "Pessoa excluída com sucesso"]);
@@ -154,7 +161,7 @@ function searchPessoas($conn)
         $sql = "SELECT 
                     cdpessoa, 
                     nome, 
-                    profissao,
+                    cpf,
                     telefone, 
                     municipio, 
                     uf
@@ -169,7 +176,7 @@ function searchPessoas($conn)
         $sql = "SELECT 
                     cdpessoa, 
                     nome, 
-                    profissao,
+                    cpf,
                     telefone, 
                     municipio, 
                     uf

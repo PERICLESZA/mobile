@@ -5,19 +5,40 @@ document.addEventListener("DOMContentLoaded", () => {
     autocompletePessoa();
 });
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const cpfInput = document.getElementById("cpf");
+
+    // Remove tudo que não for número enquanto o usuário digita
+    cpfInput.addEventListener("input", function () {
+        cpfInput.value = cpfInput.value.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+    });
 
     cpfInput.addEventListener("blur", function () {
         const cpf = cpfInput.value.trim();
 
         if (cpf && !validarCPF(cpf)) {
             cpfInput.classList.add("input-error");
-            alert("CPF inválido. Corrija antes de sair do campo.");
-            cpfInput.focus(); // impede sair do campo
+
+            // Exibe uma mensagem de erro visual em vez de um alert
+            const errorMessage = document.createElement("span");
+            errorMessage.classList.add("error-message");
+            errorMessage.innerText = "CPF/RCPN inválido!";
+
+            // Verifica se a mensagem já existe e evita duplicação
+            if (!cpfInput.parentElement.querySelector(".error-message")) {
+                cpfInput.parentElement.appendChild(errorMessage);
+            }
+
+            // Foca novamente no campo CPF para permitir correção
+            cpfInput.focus();
         } else {
             cpfInput.classList.remove("input-error");
+
+            // Remove a mensagem de erro
+            const existingErrorMessage = cpfInput.parentElement.querySelector(".error-message");
+            if (existingErrorMessage) {
+                existingErrorMessage.remove();
+            }
         }
     });
 });
@@ -50,12 +71,12 @@ function autocompletePessoa() {
                    </td>
                    <td>${pessoa.cdpessoa}</td>
                    <td>${pessoa.nome}</td>
-                   <td>${pessoa.profissao}</td>
+                   <td>${pessoa.cpf}</td>
                    <td>${pessoa.telefone}</td>
                    <td>${pessoa.municipio}</td>
                    <td>${pessoa.uf}</td>
                    <td class="action-icons">
-                      <a href="#" onclick="deletePessoa(${pessoa.cdpessoa})"><i class="fas fa-trash-alt delete-icon" title="Excluir"></i></a>
+                      <a href="#" onclick="deletePessoa(${pessoa.cdpessoa}, ${pessoa.cpf})"><i class="fas fa-trash-alt delete-icon" title="Excluir"></i></a>
                    </td>
              `;
 
@@ -172,9 +193,10 @@ function editPessoa(id) {
     });
 }
 
-function deletePessoa(id) {
+function deletePessoa(id,cpf) {
     if (!confirm("Tem certeza que deseja excluir esta pessoa?")) return;
 
+    console.log("enteri");
     fetch('../controller/pessoacontroller.php', {
         method: 'POST',
         headers: {
@@ -182,7 +204,8 @@ function deletePessoa(id) {
         },
         body: new URLSearchParams({
             action: 'delete',
-            cdpessoa: id
+            cdpessoa: id,
+            cpf: cpf
         })
     })
     .then(response => response.json())
@@ -204,7 +227,7 @@ function gerarPDF(documento) {
     const dados = {
         nome: document.getElementById("nome").value,
         nacionalidade: document.getElementById("nacionalidade").value,
-        profissao: document.getElementById("profissao").value,
+        profissao: document.getElementById("cpf").value,
         estado_civil: document.getElementById("estado_civil").value,
         rg: document.getElementById("rg").value,
         cpf: document.getElementById("cpf").value,
@@ -262,31 +285,52 @@ document.getElementById('abrirImgBtn').addEventListener('click', () => {
   });
 });
 
-// funcção para validar o cpf
-function validarCPF(cpf) {
-    cpf = cpf.replace(/[^\d]+/g, '');
+function validarCPF(codigo) {
+    codigo = codigo.replace(/[^\d]+/g, '');
 
-    if (cpf === '') return false;
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+    // Validação de CPF (11 dígitos)
+    if (codigo.length === 11) {
+       if (codigo.length !== 11 || /^(\d)\1+$/.test(codigo)) return false;
 
-    let soma = 0;
-    for (let i = 0; i < 9; i++) {
-        soma += parseInt(cpf.charAt(i)) * (10 - i);
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(codigo.charAt(i)) * (10 - i);
+        }
+        let resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(codigo.charAt(9))) return false;
+
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(codigo.charAt(i)) * (11 - i);
+        }
+        resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        return resto === parseInt(codigo.charAt(10));
+        }
+
+    // Validação do Código de Matrícula do Registro Civil (32 dígitos)
+    if (codigo.length === 32) {
+        const ano = parseInt(codigo.substr(0, 4));
+        const codUF = parseInt(codigo.substr(4, 2));
+        const codMunicipio = codigo.substr(6, 5);
+        const cartorio = codigo.substr(11, 3); // Algumas versões têm 3 dígitos
+        const tipoLivro = codigo.substr(14, 2);
+
+        // Verificações básicas
+        if (ano < 1900 || ano > new Date().getFullYear()) return false;
+        if (!/^\d+$/.test(codigo)) return false;
+        if (!(codUF >= 11 && codUF <= 53)) return false; // códigos de UF IBGE válidos
+        if (!['00', '01', '02', '03'].includes(tipoLivro)) return false;
+
+
+        return true; // passou nas verificações básicas
     }
-    let resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.charAt(9))) return false;
 
-    soma = 0;
-    for (let i = 0; i < 10; i++) {
-        soma += parseInt(cpf.charAt(i)) * (11 - i);
-    }
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.charAt(10))) return false;
-
-    return true;
+    // Caso não seja CPF nem número de matrícula
+    return false;
 }
+
 
 // Função para tratar o tempo da sessão
 let timeout;

@@ -369,3 +369,19 @@ input:focus {
     border: 2px solid red !important;
     background-color: #ffe5e5;
 }
+
+.input-error {
+    border-color: red;
+    /* Coloca a borda vermelha no campo de CPF */
+}
+
+.error-message {
+    color: red;
+    /* A cor do texto da mensagem de erro será vermelha */
+    font-size: 12px;
+    /* Ajuste do tamanho da fonte da mensagem de erro */
+    margin-top: 5px;
+    /* Espaçamento entre o campo CPF e a mensagem de erro */
+    display: block;
+    /* Faz a mensagem de erro ocupar toda a largura disponível */
+}
