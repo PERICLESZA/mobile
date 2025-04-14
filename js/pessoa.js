@@ -290,7 +290,7 @@ function validarCPF(codigo) {
 
     // Validação de CPF (11 dígitos)
     if (codigo.length === 11) {
-       if (codigo.length !== 11 || /^(\d)\1+$/.test(codigo)) return false;
+        if (/^(\d)\1+$/.test(codigo)) return false;
 
         let soma = 0;
         for (let i = 0; i < 9; i++) {
@@ -307,29 +307,35 @@ function validarCPF(codigo) {
         resto = (soma * 10) % 11;
         if (resto === 10 || resto === 11) resto = 0;
         return resto === parseInt(codigo.charAt(10));
-        }
-
-    // Validação do Código de Matrícula do Registro Civil (32 dígitos)
-    if (codigo.length === 32) {
-        const ano = parseInt(codigo.substr(0, 4));
-        const codUF = parseInt(codigo.substr(4, 2));
-        const codMunicipio = codigo.substr(6, 5);
-        const cartorio = codigo.substr(11, 3); // Algumas versões têm 3 dígitos
-        const tipoLivro = codigo.substr(14, 2);
-
-        // Verificações básicas
-        if (ano < 1900 || ano > new Date().getFullYear()) return false;
-        if (!/^\d+$/.test(codigo)) return false;
-        if (!(codUF >= 11 && codUF <= 53)) return false; // códigos de UF IBGE válidos
-        if (!['00', '01', '02', '03'].includes(tipoLivro)) return false;
-
-
-        return true; // passou nas verificações básicas
     }
 
-    // Caso não seja CPF nem número de matrícula
+    // Validação da Matrícula do Registro Civil (32 dígitos)
+    if (codigo.length === 32) {
+        return true;
+        // if (!/^\d+$/.test(codigo)) return false;
+
+        // const base = codigo.substring(0, 30);
+        // const dvInformado = codigo.substring(30, 32);
+
+        // // Cálculo do DV com módulo 11 e pesos de 2 a 9
+        // let soma = 0;
+        // let peso = 2;
+
+        // for (let i = base.length - 1; i >= 0; i--) {
+        //     soma += parseInt(base.charAt(i)) * peso;
+        //     peso = peso < 9 ? peso + 1 : 2;
+        // }
+
+        // let mod = soma % 11;
+        // let dvCalculado = mod === 0 || mod === 1 ? "00" : (11 - mod).toString().padStart(2, '0');
+
+        // return dvCalculado === dvInformado;
+    }
+
+    // Caso não seja CPF nem matrícula
     return false;
 }
+
 
 
 // Função para tratar o tempo da sessão

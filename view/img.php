@@ -16,7 +16,7 @@
 
 <body>
     <div class="dashboard-container">
-        <h1>Capturas</h1>
+        <h1>Imagens</h1>
 
         <div class="form-container">
             <div class="cad-group">
@@ -30,10 +30,17 @@
             <canvas id="snapshot" style="display: none;"></canvas>
 
             <div class="button-group">
-                <button type="button" onclick="tirarFotoPara('procuracao')">Foto Procuração</button>
-                <button type="button" onclick="tirarFotoPara('contrato')">Foto Contrato</button>
-                <button type="button" onclick="tirarFotoPara('declaracao')">Foto Declaração</button>
-                <button type="button" onclick="tirarFotoPara('revogacao')">Foto Revogação</button>
+                <button type="button" onclick="tirarFotoPara('procuracao')">Procuração</button>
+                <button type="button" onclick="tirarFotoPara('contrato')">Contrato</button>
+                <button type="button" onclick="tirarFotoPara('declaracao')">Declaração</button>
+                <button type="button" onclick="tirarFotoPara('revogacao')">Revogação</button>
+                <button type="button" onclick="tirarFotoPara('rg')">RG</button>
+                <button type="button" onclick="tirarFotoPara('cnh')">CNH</button>
+                <button type="button" onclick="tirarFotoPara('endereco')">Endereço</button>
+                <button type="button" onclick="tirarFotoPara('docextra1')">Doc extra1</button>
+                <button type="button" onclick="tirarFotoPara('docextra2')">Doc extra2</button>
+                <button type="button" onclick="tirarFotoPara('docextra3')">Doc extra3</button>
+                <button type="button" onclick="tirarFotoPara('docextra4')">Doc extra4</button>
                 <button type="button" onclick="window.close()">Voltar</button>
             </div>
         </div>
