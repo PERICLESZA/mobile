@@ -134,7 +134,7 @@ const cpf = document.getElementById("cpf").value.trim();
     })
     .then(res => res.text())
     .then(response => {
-        // alert(response);
+         alert(response);
         fields.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';
@@ -196,7 +196,6 @@ function editPessoa(id) {
 function deletePessoa(id,cpf) {
     if (!confirm("Tem certeza que deseja excluir esta pessoa?")) return;
 
-    console.log("enteri");
     fetch('../controller/pessoacontroller.php', {
         method: 'POST',
         headers: {
@@ -257,7 +256,7 @@ function gerarPDF(documento) {
     form.submit();
 }
 
-// No botão:
+// No botão Capturar Imagem:
 document.getElementById('abrirImgBtn').addEventListener('click', () => {
   const cpf = document.getElementById('cpf').value;
 
@@ -270,7 +269,7 @@ document.getElementById('abrirImgBtn').addEventListener('click', () => {
   })
   .then(response => response.text())
   .then(data => {
-    console.log('Resposta do set_session:', data);
+    // console.log('Resposta do set_session:', data);
     if (data.trim() === 'OK') {
         
     // 🔁 Abre img.php em nova aba

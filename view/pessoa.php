@@ -79,8 +79,8 @@
             <input type="hidden" id="excluido">
 
             <div class="button-group">
-                <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
                 <button type="button" id="backButton">Voltar ao Menu Principal</button>
+                <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
             </div>
             <div class="button-group">
                 <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button>
@@ -135,25 +135,6 @@
             const video = document.getElementById('camera');
             const canvas = document.getElementById('snapshot');
             let stream;
-
-            // Inicia a câmera traseira
-            // navigator.mediaDevices.getUserMedia({
-            //         video: {
-            //             facingMode: 'environment'
-            //         } // Acessa a câmera traseira
-            //     })
-            //     .then(s => {
-            //         stream = s;
-            //         video.srcObject = stream;
-            //     })
-            //     .catch(e => alert('Erro ao acessar a câmera: ' + e));
-
-            // function tirarFoto() {
-            //     canvas.width = video.videoWidth;
-            //     canvas.height = video.videoHeight;
-            //     canvas.getContext('2d').drawImage(video, 0, 0);
-            //     gerarPDFPesquisavel(); // Chama a geração de PDF logo após tirar a foto
-            // }
 
             async function gerarPDFPesquisavel() {
                 const imageBlob = await new Promise(resolve =>

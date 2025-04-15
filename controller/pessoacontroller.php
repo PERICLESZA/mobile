@@ -56,11 +56,15 @@ function createPessoa($conn)
         ':telefone' => $_POST['telefone'] ?? '',
         ':docespecial' => $_POST['docespecial'] ?? '',
         ':excluido' => $_POST['excluido'] ?? '',
-
-        
     ]);
 
-    echo json_encode(["success" => "Pessoa cadastrada com sucesso"]);
+    // pega o último ID inserido na tabela pessoa
+    $cdpessoa = $conn->lastInsertId();
+    // insere na tabela imagem usando o mesmo cdpessoa
+    $stmt2 = $conn->prepare("INSERT INTO imagem (cdpessoa) VALUES (:cdpessoa)");
+    $stmt2->execute([':cdpessoa' => $cdpessoa]);
+
+    echo json_encode(["success" => "Pessoa e imagem cadastradas com sucesso"]);
 }
 
 function updatePessoa($conn)

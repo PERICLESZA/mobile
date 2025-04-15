@@ -1,9 +1,10 @@
 <?php
-# connect.php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Retorna o array de conexões
 $connections = require '../connection/lealds.php';
 
-// Aqui você pode escolher dinamicamente ou fixo:
+// Escolha a conexão desejada
 $conn = $connections['cedroibr7'];

@@ -1,6 +1,6 @@
 <?php
-    include '../controller/auth.php';
-    $cpf = $_SESSION['cpf'] ?? '';
+include '../controller/auth.php';
+$cpf = $_SESSION['cpf'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -30,18 +30,18 @@
             <canvas id="snapshot" style="display: none;"></canvas>
 
             <div class="button-group">
-                <button type="button" onclick="tirarFotoPara('procuracao')">Procuração</button>
-                <button type="button" onclick="tirarFotoPara('contrato')">Contrato</button>
-                <button type="button" onclick="tirarFotoPara('declaracao')">Declaração</button>
-                <button type="button" onclick="tirarFotoPara('revogacao')">Revogação</button>
-                <button type="button" onclick="tirarFotoPara('rg')">RG</button>
-                <button type="button" onclick="tirarFotoPara('cnh')">CNH</button>
-                <button type="button" onclick="tirarFotoPara('endereco')">Endereço</button>
-                <button type="button" onclick="tirarFotoPara('docextra1')">Doc extra1</button>
-                <button type="button" onclick="tirarFotoPara('docextra2')">Doc extra2</button>
-                <button type="button" onclick="tirarFotoPara('docextra3')">Doc extra3</button>
-                <button type="button" onclick="tirarFotoPara('docextra4')">Doc extra4</button>
                 <button type="button" onclick="window.close()">Voltar</button>
+                <button type="button" id='procuracao' onclick="tirarFotoPara('procuracao')">Procuração</button>
+                <button type="button" id='contrato' onclick="tirarFotoPara('contrato')">Contrato</button>
+                <button type="button" id='declaracao' onclick="tirarFotoPara('declaracao')">Declaração</button>
+                <button type="button" id='revogacao' onclick="tirarFotoPara('revogacao')">Revogação</button>
+                <button type="button" id='rg' onclick="tirarFotoPara('rg')">RG</button>
+                <button type="button" id='cnh' onclick="tirarFotoPara('cnh')">CNH</button>
+                <button type="button" id='endereco' onclick="tirarFotoPara('endereco')">Endereço</button>
+                <button type="button" id='docextra1' onclick="tirarFotoPara('docextra1')">Doc extra1</button>
+                <button type="button" id='docextra2' onclick="tirarFotoPara('docextra2')">Doc extra2</button>
+                <button type="button" id='docextra3' onclick="tirarFotoPara('docextra3')">Doc extra3</button>
+                <button type="button" id='docextra4' onclick="tirarFotoPara('docextra4')">Doc extra4</button>
             </div>
         </div>
     </div>
