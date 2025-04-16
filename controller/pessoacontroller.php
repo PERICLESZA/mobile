@@ -36,17 +36,17 @@ function listPessoas($conn)
 
 function createPessoa($conn)
 {
-    // Verifica se o CPF já existe
     $cpf = $_POST['cpf'] ?? '';
 
-    // $stmtCheck = $conn->prepare("SELECT COUNT(*) as total FROM pessoa WHERE cpf = :cpf");
-    // $stmtCheck->execute([':cpf' => $cpf]);
-    // $result = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+    // Verifica se o CPF já existe
+    $stmtCheck = $conn->prepare("SELECT COUNT(*) as total FROM pessoa WHERE cpf = :cpf");
+    $stmtCheck->execute([':cpf' => $cpf]);
+    $result = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
-    // if ($result['total'] > 0) {
-    //     echo json_encode(["error" => "CPF já cadastrado"]);
-    //     return;
-    // }
+    if ($result['total'] > 0) {
+        echo json_encode(["error" => "CPF JÁ CADASTRADO!!!"]);
+        return;
+    }
 
     $stmt = $conn->prepare("INSERT INTO pessoa 
         (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone, docespecial, excluido, idlogin, dtcad)
@@ -54,27 +54,27 @@ function createPessoa($conn)
         (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone, :docespecial, :excluido, :idlogin, :dtcad)");
 
     $stmt->execute([
-        ':nome' => $_POST['nome'] ?? '',
-        ':nacionalidade' => $_POST['nacionalidade'] ?? '',
-        ':profissao' => $_POST['profissao'] ?? '',
-        ':estado_civil' => $_POST['estado_civil'] ?? '',
-        ':rg' => $_POST['rg'] ?? '',
-        ':cpf' => $_POST['cpf'] ?? '',
-        ':endereco' => $_POST['endereco'] ?? '',
-        ':bairro' => $_POST['bairro'] ?? '',
-        ':municipio' => $_POST['municipio'] ?? '',
-        ':uf' => $_POST['uf'] ?? '',
-        ':cep' => $_POST['cep'] ?? '',
-        ':telefone' => $_POST['telefone'] ?? '',
-        ':docespecial' => $_POST['docespecial'] ?? '',
-        ':excluido' => $_POST['excluido'] ?? '',
-        ':idlogin' => $_SESSION['idlogin'] ?? '',
-        ':dtcad' => date('Y-m-d H:i:s'),
-
+        ':nome'          => strtoupper($_POST['nome'] ?? ''),
+        ':nacionalidade' => strtoupper($_POST['nacionalidade'] ?? ''),
+        ':profissao'     => strtoupper($_POST['profissao'] ?? ''),
+        ':estado_civil'  => strtoupper($_POST['estado_civil'] ?? ''),
+        ':rg'            => strtoupper($_POST['rg'] ?? ''),
+        ':cpf'           => $cpf, // se necessário converter, também use strtoupper($cpf)
+        ':endereco'      => strtoupper($_POST['endereco'] ?? ''),
+        ':bairro'        => strtoupper($_POST['bairro'] ?? ''),
+        ':municipio'     => strtoupper($_POST['municipio'] ?? ''),
+        ':uf'            => strtoupper($_POST['uf'] ?? ''),
+        ':cep'           => strtoupper($_POST['cep'] ?? ''),
+        ':telefone'      => strtoupper($_POST['telefone'] ?? ''),
+        ':docespecial'   => strtoupper($_POST['docespecial'] ?? ''),
+        ':excluido'      => $_POST['excluido'] ?? '',
+        ':idlogin'       => $_SESSION['idlogin'] ?? '',
+        ':dtcad'         => date('Y-m-d H:i:s'),
     ]);
 
     // pega o último ID inserido na tabela pessoa
     $cdpessoa = $conn->lastInsertId();
+
     // insere na tabela imagem usando o mesmo cdpessoa
     $stmt2 = $conn->prepare("INSERT INTO imagem (cdpessoa) VALUES (:cdpessoa)");
     $stmt2->execute([':cdpessoa' => $cdpessoa]);

@@ -86,14 +86,14 @@ function autocompletePessoa() {
 }
 
 function savePessoa() {
-const cpf = document.getElementById("cpf").value.trim();
+    const cpf = document.getElementById("cpf").value.trim();
     const fields = [
         "nome", "nacionalidade", "profissao", "estado_civil", "rg", "cpf",
         "endereco", "bairro", "municipio", "uf", "cep", "telefone",
         "docespecial", "excluido"
     ];
 
-     // Verificação simples: nome não pode estar vazio
+    // Verificação simples: nome não pode estar vazio
     const nome = document.getElementById("nome").value.trim();
     if (nome === '') {
         alert("O nome não pode estar vazio.");
@@ -124,7 +124,7 @@ const cpf = document.getElementById("cpf").value.trim();
     }
 
     const formData = formDataArray.join('&');
-    console.log("FormData sendo enviado:", formData);
+    // console.log("FormData sendo enviado:", formData);
 
     fetch(`../controller/pessoacontroller.php?action=${action}`, {
         method: 'POST',
@@ -135,7 +135,24 @@ const cpf = document.getElementById("cpf").value.trim();
     })
     .then(res => res.text())
     .then(response => {
-        //  alert(response);
+        // Remove o prefixo "resposta do servidor " e converte para JSON
+        let jsonString = response.replace("resposta do servidor ", "");
+        let data;
+        try {
+            data = JSON.parse(jsonString);
+        } catch(e) {
+            console.error("Erro ao parsear JSON:", e);
+            data = {error: "Resposta inesperada do servidor"};
+        }
+        
+        // Exibir a mensagem desejada
+        let message = data.error || data.success || "Resposta desconhecida";
+        // Você pode exibir essa mensagem em um alert ou em um elemento na página
+        alert(message);
+        // Se preferir exibir em um elemento HTML, certifique-se de ter um container, como:
+        // document.getElementById("msgResponse").innerText = message;
+        
+        // Limpa os campos do formulário
         fields.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';
@@ -144,6 +161,10 @@ const cpf = document.getElementById("cpf").value.trim();
         editingPessoaId = null;
         document.getElementById("saveBtn").textContent = "Adicionar Pessoa";
         autocompletePessoa();
+    })
+    .catch(error => {
+        console.error("Erro na requisição:", error);
+        alert("Erro na requisição.");
     });
 }
 
