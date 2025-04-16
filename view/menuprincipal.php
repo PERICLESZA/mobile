@@ -8,6 +8,7 @@ $show_buttons = isset($_SESSION['key']) && $_SESSION['key'] === "@MasterPaulo";
 $selected_store = isset($_SESSION['store']) ? $_SESSION['store'] : 'Nenhuma loja selecionada';
 $nmstore = isset($_SESSION['nmstore']) ? $_SESSION['nmstore'] : 'Nenhuma loja selecionada';
 $usuario = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Nenhum usuário selecionada';
+$perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
 
 ?>
 
@@ -29,10 +30,16 @@ $usuario = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Nenhum usuário selec
         <div class="sidebar">
             <h2>Menu</h2>
             <ul>
-                <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] === 'A'): ?>
-                    <li><a href="user.php">User</a></li>
+                <?php if ($perfil === 'A'): ?>
+                    <li><a href="user.php">Usuários</a></li>
+                    <li><a href="admpessoa.php">Adm Pessoa</a></li>
+                    <li><a href="pessoa.php">Pessoa</a></li>
+                <?php elseif ($perfil === 'C'): ?>
+                    <li><a href="admpessoa.php">Adm Pessoa</a></li>
+                    <li><a href="pessoa.php">Pessoa</a></li>
+                <?php else: ?>
+                    <li><a href="pessoa.php">Pessoa</a></li>
                 <?php endif; ?>
-                <li><a href="pessoa.php">Pessoa</a></li>
                 <br><br>
                 <a href="../controller/logout.php">Logout</a>
             </ul>

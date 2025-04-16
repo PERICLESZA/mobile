@@ -38,6 +38,7 @@
                     <select id="perfil">
                         <option value="A">Administrador</option>
                         <option value="U">Usuário</option>
+                        <option value="C">Conferente</option>
                     </select>
                 </div>
                 <div class="input-container">
