@@ -7,6 +7,7 @@ $show_buttons = isset($_SESSION['key']) && $_SESSION['key'] === "@MasterPaulo";
 // Obtém o valor da variável de sessão 'store'
 $selected_store = isset($_SESSION['store']) ? $_SESSION['store'] : 'Nenhuma loja selecionada';
 $nmstore = isset($_SESSION['nmstore']) ? $_SESSION['nmstore'] : 'Nenhuma loja selecionada';
+$usuario = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Nenhum usuário selecionada';
 
 ?>
 
@@ -28,7 +29,9 @@ $nmstore = isset($_SESSION['nmstore']) ? $_SESSION['nmstore'] : 'Nenhuma loja se
         <div class="sidebar">
             <h2>Menu</h2>
             <ul>
-                <li><a href="user.php">User</a></li>
+                <?php if (isset($_SESSION['perfil']) && $_SESSION['perfil'] === 'A'): ?>
+                    <li><a href="user.php">User</a></li>
+                <?php endif; ?>
                 <li><a href="pessoa.php">Pessoa</a></li>
                 <br><br>
                 <a href="../controller/logout.php">Logout</a>
@@ -37,6 +40,7 @@ $nmstore = isset($_SESSION['nmstore']) ? $_SESSION['nmstore'] : 'Nenhuma loja se
         </div>
         <div class="content">
             <h1>Bem vindo ao sistema Mobile!</h1>
+            <p>Usuário logado: <strong><?php echo $usuario; ?></strong></p>
             <p>Use a barra lateral para navegar nas opções.</p>
         </div>
     </div>

@@ -36,10 +36,22 @@ function listPessoas($conn)
 
 function createPessoa($conn)
 {
+    // Verifica se o CPF já existe
+    $cpf = $_POST['cpf'] ?? '';
+
+    // $stmtCheck = $conn->prepare("SELECT COUNT(*) as total FROM pessoa WHERE cpf = :cpf");
+    // $stmtCheck->execute([':cpf' => $cpf]);
+    // $result = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+    // if ($result['total'] > 0) {
+    //     echo json_encode(["error" => "CPF já cadastrado"]);
+    //     return;
+    // }
+
     $stmt = $conn->prepare("INSERT INTO pessoa 
-        (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone, docespecial, excluido)
+        (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone, docespecial, excluido, idlogin, dtcad)
         VALUES 
-        (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone, :docespecial, :excluido)");
+        (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone, :docespecial, :excluido, :idlogin, :dtcad)");
 
     $stmt->execute([
         ':nome' => $_POST['nome'] ?? '',
@@ -56,6 +68,9 @@ function createPessoa($conn)
         ':telefone' => $_POST['telefone'] ?? '',
         ':docespecial' => $_POST['docespecial'] ?? '',
         ':excluido' => $_POST['excluido'] ?? '',
+        ':idlogin' => $_SESSION['idlogin'] ?? '',
+        ':dtcad' => date('Y-m-d H:i:s'),
+
     ]);
 
     // pega o último ID inserido na tabela pessoa
@@ -90,7 +105,9 @@ function updatePessoa($conn)
         cep = :cep,
         telefone = :telefone,
         docespecial = :docespecial,
-        excluido = :excluido
+        excluido = :excluido,
+        idlogin = :idlogin,
+        dtalt = :dtalt
         WHERE cdpessoa = :cdpessoa");
 
     $stmt->execute([
@@ -108,7 +125,10 @@ function updatePessoa($conn)
         ':cep' => $_POST['cep'] ?? '',
         ':telefone' => $_POST['telefone'] ?? '',
         ':docespecial' => $_POST['docespecial'] ?? '',
-        ':excluido' => $_POST['excluido'] ?? ''
+        ':excluido' => $_POST['excluido'] ?? '',
+        ':idlogin' => $_SESSION['idlogin'] ?? '',
+        ':dtalt' => date('Y-m-d')
+
     ]);
 
     echo json_encode(["success" => "Pessoa atualizada com sucesso"]);
@@ -129,9 +149,14 @@ function deletePessoa($conn)
     // error_log("Atualizando CPF: " . $cpfModificado);
     // error_log("CDPESSOA: " . $cdpessoa);
 
-    $stmt = $conn->prepare("UPDATE pessoa SET cpf = :cpf, excluido = 1 WHERE cdpessoa = :cdpessoa");
+    $dtdel = date('Y-m-d');
+    $idlogin = $_SESSION['idlogin'];
+
+    $stmt = $conn->prepare("UPDATE pessoa SET cpf = :cpf, excluido = 1, dtdel = :dtdel, idlogin = :idlogin WHERE cdpessoa = :cdpessoa");
     $stmt->bindParam(":cdpessoa", $cdpessoa);
     $stmt->bindParam(":cpf", $cpfModificado);
+    $stmt->bindParam(":dtdel", $dtdel);
+    $stmt->bindParam(":idlogin", $idlogin);
 
     if ($stmt->execute()) {
         echo json_encode(["success" => "Pessoa excluída com sucesso"]);
@@ -159,6 +184,7 @@ function getPessoaById($conn)
 function searchPessoas($conn)
 {
     $term = $_GET['term'] ?? '';
+    $idlogin = $_SESSION['idlogin'];
 
     if ($term === '****') {
         // Buscar todos os registros, excluindo os marcados como excluido = 1
@@ -168,13 +194,19 @@ function searchPessoas($conn)
                     cpf,
                     telefone, 
                     municipio, 
-                    uf
+                    uf,
+                    idlogin,
+                    ok
                 FROM 
                     pessoa
-                WHERE excluido != 1
+                WHERE excluido != 1 
+                  AND idlogin = :idlogin 
+                  AND ok = 0
                 ORDER BY nome ASC";
 
-        $stmt = $conn->query($sql); // sem bind, pois não tem parâmetros
+        $stmt = $conn->prepare($sql); // sem bind, pois não tem parâmetros
+        $stmt->execute([':idlogin' => $idlogin]);
+        
     } else {
         // Buscar com filtro por nome, excluindo os marcados como excluido = 1
         $sql = "SELECT 
@@ -183,14 +215,20 @@ function searchPessoas($conn)
                     cpf,
                     telefone, 
                     municipio, 
-                    uf
+                    uf,
+                    idlogin,
+                    ok
                 FROM 
                     pessoa
-                WHERE nome LIKE :term AND excluido != 1
+                WHERE nome LIKE :term 
+                  AND excluido != 1
+                  AND ok = 0
+                  AND idlogin = :idlogin
                 ORDER BY nome ASC";
 
         $stmt = $conn->prepare($sql);
         $stmt->execute([':term' => "%$term%"]);
+        $stmt->execute([':idlogin' => $idlogin]);
     }
 
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));

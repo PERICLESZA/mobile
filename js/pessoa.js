@@ -124,6 +124,7 @@ const cpf = document.getElementById("cpf").value.trim();
     }
 
     const formData = formDataArray.join('&');
+    console.log("FormData sendo enviado:", formData);
 
     fetch(`../controller/pessoacontroller.php?action=${action}`, {
         method: 'POST',
@@ -134,7 +135,7 @@ const cpf = document.getElementById("cpf").value.trim();
     })
     .then(res => res.text())
     .then(response => {
-         alert(response);
+        //  alert(response);
         fields.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = '';

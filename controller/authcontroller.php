@@ -33,9 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Verificar se encontrou um usuário
     if ($stmt->rowCount() > 0) {
+
+        // Buscar os dados do usuário
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC); 
+
         // Criar sessão do usuário
         $_SESSION['usuario'] = $login;
         $_SESSION['key'] = $key;
+        $_SESSION['idlogin'] = $usuario['idlogin'];
+        $_SESSION['nome'] = $usuario['nome'];
+        $_SESSION['perfil'] = $usuario['perfil'];
 
         // Definir a loja com base na Key
         // if ($key === "@MasterPaulo" && !empty($_POST['store'])) {
@@ -59,7 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // }
 
         // Redirecionar para a página principal
-        header('Location: ../view/menuprincipal.php');
+        if (isset($_SESSION['perfil']) && $_SESSION['perfil'] === 'A'){
+            header('Location: ../view/menuprincipal.php');
+        } else {
+            header('Location: ../view/pessoa.php');
+        }
+
         exit;
     } else {
         // Redirecionar de volta para o login com erro

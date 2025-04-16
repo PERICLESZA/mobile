@@ -1,4 +1,11 @@
-<?php include '../controller/auth.php'; ?>
+<?php include '../controller/auth.php';
+
+// para ver o conteúdo na SESSION
+// echo '<pre>';
+// var_dump($_SESSION);
+// echo '</pre>';
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -23,7 +30,7 @@
                 </div>
                 <div class="input-container">
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" placeholder="Digite o CPF">
+                    <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF">
                 </div>
                 <div class="input-container">
                     <label for="nacionalidade">Nacionalidade</label>
