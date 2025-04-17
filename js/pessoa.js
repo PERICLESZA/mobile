@@ -90,7 +90,7 @@ function savePessoa() {
     const fields = [
         "nome", "nacionalidade", "profissao", "estado_civil", "rg", "cpf",
         "endereco", "bairro", "municipio", "uf", "cep", "telefone",
-        "docespecial", "excluido"
+        "docespecial", "apelido", "excluido"
     ];
 
     // Verificação simples: nome não pode estar vazio
@@ -153,14 +153,20 @@ function savePessoa() {
         // document.getElementById("msgResponse").innerText = message;
         
         // Limpa os campos do formulário
-        fields.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = '';
-        });
+        // fields.forEach(id => {
+        //     const el = document.getElementById(id);
+        //     if (el) el.value = '';
+        // });
 
         editingPessoaId = null;
         document.getElementById("saveBtn").textContent = "Adicionar Pessoa";
         autocompletePessoa();
+        // Chama o botão de captura de imagem após salvar
+        const abrirImgBtn = document.getElementById("abrirImgBtn");
+        if (abrirImgBtn) {
+            abrirImgBtn.click();
+        }
+
     })
     .catch(error => {
         console.error("Erro na requisição:", error);
@@ -195,6 +201,7 @@ function editPessoa(id) {
             document.getElementById("cep").value = data.cep || '';
             document.getElementById("telefone").value = data.telefone || '';
             document.getElementById("docespecial").value = data.docespecial || '';
+            document.getElementById("apelido").value = data.apelido || '';
             // document.getElementById("excluido").value = data.excluido || '';
 
 
@@ -258,6 +265,7 @@ function gerarPDF(documento) {
         uf: document.getElementById("uf").value,
         cep: document.getElementById("cep").value,
         telefone: document.getElementById("telefone").value,
+        apelido: document.getElementById("apelido").value, // <- Envia a opção selecionada
         documento: documento // <- Envia a opção selecionada
     };
 

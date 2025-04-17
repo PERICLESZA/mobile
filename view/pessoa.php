@@ -23,6 +23,10 @@
         <h1>Pessoa</h1>
 
         <div class="form-container">
+            <div class="button-group">
+                <button type="button" id="backButton">Voltar ao Menu Principal</button>
+                </br>
+            </div>
             <div class="cad-group">
                 <div class="input-container">
                     <label for="nome">Nome</label>
@@ -81,17 +85,20 @@
                     <label for="docespecial">Documento</label>
                     <input type="text" id="docespecial" placeholder="Digite um documento extra">
                 </div>
+                <div class="input-container">
+                    <label for="apelido">Apelido</label>
+                    <input type="text" id="apelido" placeholder="Digite o apelido da Pessoa">
+                </div>
             </div>
             <input type="hidden" id="cdpessoa">
             <input type="hidden" id="excluido">
 
             <div class="button-group">
-                <button type="button" id="backButton">Voltar ao Menu Principal</button>
                 <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
             </div>
             <div class="button-group">
-                <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button>
-                <button type="button" id="abrirImgBtn">Capturar Imagem</button>
+                <!-- <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button> -->
+                <button type="button" id="abrirImgBtn" style="display: none;">Capturar Imagem</button>
 
                 <!-- <button type="button" onclick="gerarPDF('procuracao')">Procuração</button>
                 <button type="button" onclick="gerarPDF('contrato')">Contrato</button>
@@ -105,8 +112,8 @@
 
 
             </div>
-            <div>
-                <h2>Buscar Pessoa</h2>
+            <div class="input-container">
+                <label for="searchInput">Pesquise: Nome/CPF/Apelido</label>
                 <input
                     type="text"
                     id="searchInput"

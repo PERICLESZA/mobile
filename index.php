@@ -43,8 +43,8 @@ $pdo = $connections['cedroibr7'];
             <label for="password">Senha:</label>
             <input type="password" id="password" name="password" required autocomplete="off">
 
-            <label for="key">Key:</label>
-            <input type="password" id="key" name="key" oninput="checkKey()">
+            <!-- <label for="key">Key:</label>
+            <input type="password" id="key" name="key" oninput="checkKey()"> -->
 
             <input type="hidden" id="nmstore" name="nmstore">
 

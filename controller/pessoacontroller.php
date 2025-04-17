@@ -67,6 +67,7 @@ function createPessoa($conn)
         ':cep'           => strtoupper($_POST['cep'] ?? ''),
         ':telefone'      => strtoupper($_POST['telefone'] ?? ''),
         ':docespecial'   => strtoupper($_POST['docespecial'] ?? ''),
+        ':apelido'       => strtoupper($_POST['apelido'] ?? ''),
         ':excluido'      => $_POST['excluido'] ?? '',
         ':idlogin'       => $_SESSION['idlogin'] ?? '',
         ':dtcad'         => date('Y-m-d H:i:s'),
@@ -105,6 +106,7 @@ function updatePessoa($conn)
         cep = :cep,
         telefone = :telefone,
         docespecial = :docespecial,
+        apelido = :apelido,
         excluido = :excluido,
         idlogin = :idlogin,
         dtalt = :dtalt
@@ -125,6 +127,7 @@ function updatePessoa($conn)
         ':cep' => $_POST['cep'] ?? '',
         ':telefone' => $_POST['telefone'] ?? '',
         ':docespecial' => $_POST['docespecial'] ?? '',
+        ':apelido' => $_POST['apelido'] ?? '',
         ':excluido' => $_POST['excluido'] ?? '',
         ':idlogin' => $_SESSION['idlogin'] ?? '',
         ':dtalt' => date('Y-m-d')
@@ -189,14 +192,7 @@ function searchPessoas($conn)
     if ($term === '****') {
         // Buscar todos os registros, excluindo os marcados como excluido = 1
         $sql = "SELECT 
-                    cdpessoa, 
-                    nome, 
-                    cpf,
-                    telefone, 
-                    municipio, 
-                    uf,
-                    idlogin,
-                    ok
+                    cdpessoa, nome, cpf, telefone, municipio, uf,idlogin,ok
                 FROM 
                     pessoa
                 WHERE excluido != 1 
@@ -204,31 +200,26 @@ function searchPessoas($conn)
                   AND ok = 0
                 ORDER BY nome ASC";
 
-        $stmt = $conn->prepare($sql); // sem bind, pois não tem parâmetros
+        $stmt = $conn->prepare($sql);
         $stmt->execute([':idlogin' => $idlogin]);
-        
     } else {
-        // Buscar com filtro por nome, excluindo os marcados como excluido = 1
+        // Buscar com filtro por nome, cpf ou apelido
         $sql = "SELECT 
-                    cdpessoa, 
-                    nome, 
-                    cpf,
-                    telefone, 
-                    municipio, 
-                    uf,
-                    idlogin,
-                    ok
+                    cdpessoa, nome, cpf, telefone, municipio, uf,idlogin, apelido, ok
                 FROM 
                     pessoa
-                WHERE nome LIKE :term 
-                  AND excluido != 1
-                  AND ok = 0
-                  AND idlogin = :idlogin
+                WHERE 
+                    (nome LIKE :term OR cpf LIKE :term OR apelido LIKE :term)
+                    AND excluido != 1
+                    AND ok = 0
+                    AND idlogin = :idlogin
                 ORDER BY nome ASC";
 
         $stmt = $conn->prepare($sql);
-        $stmt->execute([':term' => "%$term%"]);
-        $stmt->execute([':idlogin' => $idlogin]);
+        $stmt->execute([
+            ':term' => "%$term%",
+            ':idlogin' => $idlogin
+        ]);
     }
 
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));

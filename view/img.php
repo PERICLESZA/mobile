@@ -17,7 +17,11 @@ $cpf = $_SESSION['cpf'] ?? '';
 <body>
     <div class="dashboard-container">
         <h1>Imagens</h1>
-
+        <div class="button-group">
+            <div class="form-container">
+                <button type="button" onclick="window.close()">Voltar</button>
+            </div>
+        </div>
         <div class="form-container">
             <div class="cad-group">
                 <div class="input-container">
@@ -30,7 +34,6 @@ $cpf = $_SESSION['cpf'] ?? '';
             <canvas id="snapshot" style="display: none;"></canvas>
 
             <div class="button-group">
-                <button type="button" onclick="window.close()">Voltar</button>
                 <button type="button" id='procuracao' onclick="tirarFotoPara('procuracao')">Procuração</button>
                 <button type="button" id='contrato' onclick="tirarFotoPara('contrato')">Contrato</button>
                 <button type="button" id='declaracao' onclick="tirarFotoPara('declaracao')">Declaração</button>
