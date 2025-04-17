@@ -1,13 +1,4 @@
-<?php include '../controller/auth.php';
-
-// para ver o conteúdo na SESSION
-// echo '<pre>';
-// var_dump($_SESSION);
-// echo '</pre>';
-$perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
-
-
-?>
+<?php include '../controller/auth.php'; ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -22,14 +13,7 @@ $perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
 
 <body>
     <div class="dashboard-container">
-        <h2>Cadastro da Pessoa</h2>
-
-        <?php if ($perfil != 'U'): ?>
-            <div class="button-group">
-                <button type="button" id="backButton">Voltar ao Menu Principal</button>
-                </br>
-            </div>
-        <?php endif; ?>
+        <h1>Pessoa</h1>
 
         <div class="form-container">
             <div class="cad-group">
@@ -39,7 +23,7 @@ $perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
                 </div>
                 <div class="input-container">
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF">
+                    <input type="text" id="cpf" placeholder="Digite o CPF">
                 </div>
                 <div class="input-container">
                     <label for="nacionalidade">Nacionalidade</label>
@@ -90,21 +74,17 @@ $perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
                     <label for="docespecial">Documento</label>
                     <input type="text" id="docespecial" placeholder="Digite um documento extra">
                 </div>
-                <div class="input-container">
-                    <label for="apelido">Apelido</label>
-                    <input type="text" id="apelido" placeholder="Digite o apelido da Pessoa">
-                </div>
             </div>
             <input type="hidden" id="cdpessoa">
             <input type="hidden" id="excluido">
 
             <div class="button-group">
-                <button type="button" id="saveBtn" onclick="savePessoa()">Gravar Pessoa</button>
+                <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
+                <button type="button" id="backButton">Voltar ao Menu Principal</button>
             </div>
-            
             <div class="button-group">
-                <!-- <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button> -->
-                <button type="button" id="abrirImgBtn" style="display: none;">Capturar Imagem</button>
+                <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button>
+                <button type="button" id="abrirImgBtn">Capturar Imagem</button>
 
                 <!-- <button type="button" onclick="gerarPDF('procuracao')">Procuração</button>
                 <button type="button" onclick="gerarPDF('contrato')">Contrato</button>
@@ -118,8 +98,8 @@ $perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
 
 
             </div>
-            <div class="input-container">
-                <label for="searchInput">Pesquise: Nome/CPF/Apelido</label>
+            <div>
+                <h2>Buscar Pessoa</h2>
                 <input
                     type="text"
                     id="searchInput"
@@ -155,6 +135,25 @@ $perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
             const video = document.getElementById('camera');
             const canvas = document.getElementById('snapshot');
             let stream;
+
+            // Inicia a câmera traseira
+            // navigator.mediaDevices.getUserMedia({
+            //         video: {
+            //             facingMode: 'environment'
+            //         } // Acessa a câmera traseira
+            //     })
+            //     .then(s => {
+            //         stream = s;
+            //         video.srcObject = stream;
+            //     })
+            //     .catch(e => alert('Erro ao acessar a câmera: ' + e));
+
+            // function tirarFoto() {
+            //     canvas.width = video.videoWidth;
+            //     canvas.height = video.videoHeight;
+            //     canvas.getContext('2d').drawImage(video, 0, 0);
+            //     gerarPDFPesquisavel(); // Chama a geração de PDF logo após tirar a foto
+            // }
 
             async function gerarPDFPesquisavel() {
                 const imageBlob = await new Promise(resolve =>

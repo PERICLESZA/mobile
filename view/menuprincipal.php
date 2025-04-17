@@ -31,14 +31,14 @@ $perfil = isset($_SESSION['perfil']) ? $_SESSION['perfil'] : '';
             <h2>Menu</h2>
             <ul>
                 <?php if ($perfil === 'A'): ?>
-                    <li><a href="user.php">Usuários</a></li>
-                    <li><a href="admpessoa.php">Adm Pessoa</a></li>
-                    <li><a href="pessoa.php">Pessoa</a></li>
+                    <li><a href="user.php">Cadastro do Usuário</a></li>
+                    <li><a href="admpessoa.php">Administrar Cadastro Pessoa</a></li>
+                    <li><a href="pessoa.php">Cadastro da Pessoa</a></li>
                 <?php elseif ($perfil === 'C'): ?>
-                    <li><a href="admpessoa.php">Adm Pessoa</a></li>
-                    <li><a href="pessoa.php">Pessoa</a></li>
+                    <li><a href="admpessoa.php">Administrar Cadastro Pessoa</a></li>
+                    <li><a href="pessoa.php">Cadastro da Pessoa</a></li>
                 <?php else: ?>
-                    <li><a href="pessoa.php">Pessoa</a></li>
+                    <li><a href="pessoa.php">Cadastro da Pessoa</a></li>
                 <?php endif; ?>
                 <br><br>
                 <a href="../controller/logout.php">Logout</a>

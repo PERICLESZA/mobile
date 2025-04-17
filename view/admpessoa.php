@@ -16,6 +16,10 @@
         <h1>Admin Pessoa</h1>
 
         <div class="form-container">
+            <div class="button-group">
+                <button type="button" id="backButton">Voltar ao Menu Principal</button>
+                <br/>
+            </div>
             <div class="cad-group">
                 <div class="input-container">
                     <label for="nome">Nome</label>
@@ -87,7 +91,6 @@
             <input type="hidden" id="excluido">
 
             <div class="button-group">
-                <button type="button" id="backButton">Voltar ao Menu Principal</button>
                 <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
             </div>
             <div class="button-group">

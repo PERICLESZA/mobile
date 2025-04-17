@@ -16,13 +16,12 @@ $cpf = $_SESSION['cpf'] ?? '';
 
 <body>
     <div class="dashboard-container">
-        <h1>Imagens</h1>
-        <div class="button-group">
-            <div class="form-container">
-                <button type="button" onclick="window.close()">Voltar</button>
-            </div>
-        </div>
+        <h2>Registrar Imagens</h2>
         <div class="form-container">
+            <div class="button-group">
+                <button type="button" id="backButton" onclick="window.close()">Voltar ao Cadastro da Pessoa</button>
+                </br>
+            </div>
             <div class="cad-group">
                 <div class="input-container">
                     <label for="cpf">CPF</label>
