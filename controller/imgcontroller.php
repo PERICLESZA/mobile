@@ -1,6 +1,7 @@
 <?php
 include '../controller/auth.php';
-// include '../connection/connect.php';
+
+include '../connection/connect.php';
 $cpf = $_SESSION['cpf'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Documento salvo com sucesso como $nome na pasta $cpf.";
         
         // --- NOVO BLOCO: Atualiza a tabela imagem ---
-        include '../connection/connect.php';
+        // include '../connection/connect.php';
 
         $tipo = $_POST['tipo'] ?? ''; // tipo = nome do campo (ex: 'procuracao', 'contrato', etc.)
 
@@ -88,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json');
 
-    include '../connection/connect.php';
+    // include '../connection/connect.php';
 
     if (!isset($_SESSION['cpf'])) {
         echo json_encode(['error' => 'CPF não encontrado na sessão']);

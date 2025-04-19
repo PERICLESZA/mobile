@@ -13,13 +13,11 @@
 
 <body>
     <div class="dashboard-container">
-        <h1>Admin Pessoa</h1>
-
+        <h2>Administrar Cadastro de Pessoas</h2>
+        <div class="button-group">
+            <button type="button" id="backButton">Voltar ao Menu Principal</button>
+        </div>
         <div class="form-container">
-            <div class="button-group">
-                <button type="button" id="backButton">Voltar ao Menu Principal</button>
-                <br/>
-            </div>
             <div class="cad-group">
                 <div class="input-container">
                     <label for="nome">Nome</label>
@@ -94,10 +92,10 @@
                 <button type="button" id="saveBtn" onclick="savePessoa()">Salvar Pessoa</button>
             </div>
             <div class="button-group">
-                <!-- <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button> -->
                 <button type="button" id="abrirImgBtn">Ver Imagem</button>
             </div>
             </br>
+            <!-- <button type="button" class="btn-vermelho" onclick="gerarPDF('todos')">Gerar docs</button> -->
             <div class="cad-group">
                 <div class="input-container">
                     <label for="docespecial">Pesquisa Pessoa</label>

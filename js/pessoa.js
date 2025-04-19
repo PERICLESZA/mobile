@@ -135,6 +135,7 @@ function savePessoa() {
     })
     .then(res => res.text())
     .then(response => {
+        // console.log(response)
         // Remove o prefixo "resposta do servidor " e converte para JSON
         let jsonString = response.replace("resposta do servidor ", "");
         let data;

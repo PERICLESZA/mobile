@@ -38,7 +38,7 @@ getCameraStream().then((s) => {
   atualizarStatusDosBotoes(); // Atualiza os botões logo após a câmera ser iniciada
 });
 
-// Função de captura da foto com melhoria de nitidez
+// Função de captura da foto com melhoria de nitidez colorida
 async function tirarFotoPara(tipo) {
   const cpf = document.getElementById("cpf").value.trim();
   if (!cpf) {
@@ -86,13 +86,75 @@ async function tirarFotoPara(tipo) {
      
 }
 
+// // tira a foto preto e branco
+// async function tirarFotoPara(tipo) {
+//   const cpf = document.getElementById("cpf").value.trim();
+//   if (!cpf) {
+//     alert("Nenhuma pessoa selecionada com CPF válido.");
+//     return;
+//   }
+
+//   canvas.width = video.videoWidth;
+//   canvas.height = video.videoHeight;
+
+//   const ctx = canvas.getContext("2d");
+//   ctx.imageSmoothingEnabled = true;
+//   ctx.imageSmoothingQuality = "high";
+//   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+//   // 🖤 Aplicar filtro preto e branco (grayscale)
+//   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+//   const data = imageData.data;
+
+//   for (let i = 0; i < data.length; i += 4) {
+//     const r = data[i];
+//     const g = data[i + 1];
+//     const b = data[i + 2];
+//     const gray = 0.3 * r + 0.59 * g + 0.11 * b;
+//     data[i] = data[i + 1] = data[i + 2] = gray; // aplica cinza
+//   }
+
+//   ctx.putImageData(imageData, 0, 0);
+
+//   // 🧾 Convertendo para PDF
+//   canvas.toBlob(async (blob) => {
+//     const formData = new FormData();
+//     const nomeArquivo = `${tipo}_${cpf}.pdf`;
+
+//     const pdfDoc = await PDFLib.PDFDocument.create();
+//     const img = await pdfDoc.embedJpg(await blob.arrayBuffer());
+//     const page = pdfDoc.addPage([img.width, img.height]);
+//     page.drawImage(img, {
+//       x: 0,
+//       y: 0,
+//       width: img.width,
+//       height: img.height,
+//     });
+
+//     const pdfBytes = await pdfDoc.save();
+//     const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
+//     formData.append("pdf", pdfBlob, nomeArquivo);
+//     formData.append("nome", nomeArquivo);
+//     formData.append("tipo", tipo);
+
+//     const res = await fetch("../controller/imgcontroller.php", {
+//       method: "POST",
+//       body: formData,
+//     });
+
+//     const resultado = await res.text();
+//     alert(resultado);
+//     atualizarStatusDosBotoes();
+//   }, "image/jpeg", 1);
+// }
+
 // Função para carregar e pintar os botões com base nos status das imagens
 async function carregarStatusDasImagens() {
   try {
     const response = await fetch("../controller/imgcontroller.php");
     const data = await response.json();
 
-    console.log("JSON recebido:", data); // Verifique o que está chegando
+    // console.log("JSON recebido:", data); // Verifique o que está chegando
 
     if (data.error) {
       console.warn("Erro ao carregar status:", data.error);
@@ -100,14 +162,14 @@ async function carregarStatusDasImagens() {
     }
 
     Object.entries(data).forEach(([campo, valor]) => {
-      console.log(`Campo: ${campo}, Valor: ${valor}`); // Debug: mostra cada par recebido
+      //  console.log(`Campo: ${campo}, Valor: ${valor}`); // Debug: mostra cada par recebido
       
       if (valor === "1" || valor === 1) { // Se o valor for 1 (como string ou número)
         const botao = document.getElementById(campo);
         if (botao) {
           botao.style.backgroundColor = "green";
           botao.style.color = "white";
-          console.log(`Pintando o botão ${campo} de verde`);
+          // console.log(`Pintando o botão ${campo} de verde`);
         } else {
           console.warn(`Botão com id "${campo}" não encontrado!`);
         }
@@ -122,15 +184,15 @@ async function carregarStatusDasImagens() {
 getCameraStream().then((s) => {
   stream = s;
   video.srcObject = stream;
-  carregarStatusDasImagens(); // <- Aqui!
-  atualizarStatusDosBotoes();  // Atualiza os botões com os novos status
+  // carregarStatusDasImagens(); // <- Aqui!
+  // atualizarStatusDosBotoes();  // Atualiza os botões com os novos status
 });
 
+//função para pintar os botões de verde
 function atualizarStatusDosBotoes() {
-    fetch('img.php')
+    fetch('../controller/imgcontroller.php') // <- aqui corrigido
         .then(response => response.json())
         .then(status => {
-            // Aqui você atualiza o estilo de cada botão com base no status retornado
             for (let chave in status) {
                 const botao = document.getElementById(chave);
                 if (status[chave] == 1) {
@@ -141,5 +203,17 @@ function atualizarStatusDosBotoes() {
                     botao.classList.add('bg-gray-300');
                 }
             }
-        });
+        })
+        .catch(error => console.error("Erro ao atualizar botões:", error));
+}
+
+function mostrarFotoPara(tipo) {
+    const cpf = document.getElementById("cpf").value.trim();
+    if (!cpf) {
+        alert("CPF não encontrado.");
+        return;
+    }
+
+    const url = `../controller/ver-pdfcontroller.php?cpf=${cpf}&tipo=${tipo}`;
+    window.open(url, '_blank');
 }

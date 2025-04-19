@@ -1,0 +1,21 @@
+.button-pair {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.button-pair button:first-child {
+    flex: 0 0 80%;
+    padding: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.button-pair button:last-child {
+    flex: 0 0 20%;
+    padding: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+}

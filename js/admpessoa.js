@@ -263,28 +263,28 @@ function gerarPDF(documento) {
     form.submit();
 }
 
-// document.getElementById('abrirImgBtn').addEventListener('click', () => {
-//   const cpf = document.getElementById('cpf').value;
+document.getElementById('abrirImgBtn').addEventListener('click', () => {
+  const cpf = document.getElementById('cpf').value;
 
-//   fetch('../controller/set_session.php', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded'
-//     },
-//     body: 'cpf=' + encodeURIComponent(cpf)
-//   })
-//   .then(response => response.text())
-//   .then(data => {
-//     if (data.trim() === 'OK') {
-//       window.open('img.php', '_blank');
-//     } else {
-//       alert('Erro ao definir CPF na sessão');
-//     }
-//   })
-//   .catch(err => {
-//     console.error('Erro no fetch do CPF:', err);
-//   });
-// });
+  fetch('../controller/set_session.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: 'cpf=' + encodeURIComponent(cpf)
+  })
+  .then(response => response.text())
+  .then(data => {
+    if (data.trim() === 'OK') {
+      window.open('img.php', '_blank');
+    } else {
+      alert('Erro ao definir CPF na sessão');
+    }
+  })
+  .catch(err => {
+    console.error('Erro no fetch do CPF:', err);
+  });
+});
 
 
 function validarCPF(codigo) {

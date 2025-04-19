@@ -49,9 +49,9 @@ function createPessoa($conn)
     }
 
     $stmt = $conn->prepare("INSERT INTO pessoa 
-        (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone, docespecial, excluido, idlogin, dtcad)
+        (nome, nacionalidade, profissao, estado_civil, rg, cpf, endereco, bairro, municipio, uf, cep, telefone, docespecial, excluido, apelido, idlogin, dtcad)
         VALUES 
-        (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone, :docespecial, :excluido, :idlogin, :dtcad)");
+        (:nome, :nacionalidade, :profissao, :estado_civil, :rg, :cpf, :endereco, :bairro, :municipio, :uf, :cep, :telefone, :docespecial, :excluido, :apelido,  :idlogin, :dtcad)");
 
     $stmt->execute([
         ':nome'          => strtoupper($_POST['nome'] ?? ''),
@@ -205,7 +205,7 @@ function searchPessoas($conn)
     } else {
         // Buscar com filtro por nome, cpf ou apelido
         $sql = "SELECT 
-                    cdpessoa, nome, cpf, telefone, municipio, uf,idlogin, apelido, ok
+                    cdpessoa, nome, cpf, telefone, municipio, uf, idlogin, apelido, ok
                 FROM 
                     pessoa
                 WHERE 
